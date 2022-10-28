@@ -2,7 +2,9 @@ import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/ico
 import { Menu } from 'antd';
 import React, { useState,useEffect } from 'react';
 import {withRouter} from "react-router-dom"
-import routes from './mock'
+import mock from './mock'
+import definedRoutes from '../../routes/definedRoutes';
+import {getAuthRoute} from '../../routes/routes'
 function getItem(label, key, icon, children,type) {
     return {
         key,
@@ -29,16 +31,11 @@ const pMonitor = {}
 pMonitor.getLoadingTime = ()=>{
     const[{domComplete}] = performance.getEntriesByType('navigation');
     console.log('@@:',domComplete);
-    console.log(performance.getEntriesByType('navigation'));
 }
 
 const LeftNav = (props) => {
     // 获取菜单项
-    const items = getMenu(routes);
-    const rootSubmenuKeys = items.map(item=>{
-        return item.route;
-    });
-    const [openKeys, setOpenKeys] = useState(['/']);
+    const items = getMenu(mock);
     const [selectedKeys, setselectedKeys] = useState(['/img']);
     const onSelect = (item)=>{
         setselectedKeys([item.key]);
@@ -47,35 +44,24 @@ const LeftNav = (props) => {
 
     // 菜单选中
     useEffect(()=>{
-        console.log(props);
         window.onload = ()=>{
             pMonitor.getLoadingTime();
         }
-        console.log(1233);
         setselectedKeys([props.history.location.pathname]);
     
     },[props.history.location.pathname]);
 
-    const onOpenChange = (keys) => {
-        const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
-        if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
-            setOpenKeys(keys);
-        } else {
-            setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
-        }
-    };
+ 
     return (
-        <>
+        <div styles={{width:'calc( 100vh- )'}}>
             <Menu
                 mode="inline"
-                // openKeys={openKeys}
                 selectedKeys={selectedKeys}
-                // onOpenChange={onOpenChange}
                 onSelect={onSelect}
                 style={{ width: 256 }}
                 items={items}
             />
-        </>
+        </div>
 
     )
 }

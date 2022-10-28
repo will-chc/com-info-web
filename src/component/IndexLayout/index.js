@@ -3,12 +3,8 @@ import createRoutes from "../../routes/routes";
 import LeftNav from "../LeftNav/LeftNav";
 import styles from './index.less';
 import mock from "../LeftNav/mock";
-import definedRoutes from "../../routes/definedRoutes";
-const IndexLayout = () => {
-    useEffect(()=>{
-        console.log(definedRoutes);
-        console.log('@@@',);
-    },[])
+const IndexLayout = (props) => {
+
     return (
         <div className={styles.container}>
             <header className={styles.header}></header>
@@ -16,8 +12,8 @@ const IndexLayout = () => {
                 <div className={styles.nav} >
                     <LeftNav />
                 </div>
-                <div className="content">
-                        {createRoutes(mock,definedRoutes.find(item=>item.path=='/').childern)}
+                <div className={styles.content}>
+                        {createRoutes(mock,props.route.children)}
                 </div>
             </div>
         </div>
