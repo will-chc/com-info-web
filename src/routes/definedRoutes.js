@@ -23,53 +23,53 @@ export default [
 
 
     },
-    {
-        path: '/',
-        key: 'Home',
-        name: '首页',
-        redirect: {
-            to: '/',
-            jump: '/home'
-        },
-        component: HomePage,
-        children: [
-            {
-                path: '/home',
-                key: 'home',
-                name: '首页',
-                component: TestPage,
+    // {
+    //     path: '/',
+    //     key: 'Home',
+    //     name: '首页',
+    //     // redirect: {
+    //     //     to: '/',
+    //     //     jump: '/home'
+    //     // },
+    //     component: HomePage,
+    //     children: [
+    //         {
+    //             path: '/home',
+    //             key: 'home',
+    //             name: '首页',
+    //             component: TestPage,
 
-            },
-            {
-                path: '/utils',
-                key: 'utils',
-                name: '工具',
-                component: UserPage
-            },
+    //         },
+    //         {
+    //             path: '/utils',
+    //             key: 'utils',
+    //             name: '工具',
+    //             component: UserPage
+    //         },
 
-            {
-                path: '/file/1',
-                key: 'file1',
-                name: '文件1',
-                component: Upload
-            },
-            {
-                path: '/file/2',
-                key: 'file2',
-                name: '文件2',
-                component: UserPage
-            },
-            {
-                path: '/file/3',
-                key: 'file3',
-                name: '文件4',
-                component: TestPage
-            },
+    //         {
+    //             path: '/file/1',
+    //             key: 'file1',
+    //             name: '文件1',
+    //             component: Upload
+    //         },
+    //         {
+    //             path: '/file/2',
+    //             key: 'file2',
+    //             name: '文件2',
+    //             component: UserPage
+    //         },
+    //         {
+    //             path: '/file/3',
+    //             key: 'file3',
+    //             name: '文件4',
+    //             component: TestPage
+    //         },
 
 
-        ]
+    //     ]
 
-    },
+    // },
     // {
     //     path:'*',
     //     key:'404',
