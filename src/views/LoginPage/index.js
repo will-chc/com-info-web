@@ -2,23 +2,19 @@ import React from "react";
 import { Button, Form, Input,message } from "antd";
 import styles from './index.less'
 import VerifyInput from "../../component/VerifyInput";
+import { checkAccount, checkPassword } from "../../utils/check";
 const LoginPage = (props) => {
     const [form] = Form.useForm();
     const layout = {
         labelCol:{span:6},
         wrapperCol:{span:15}
     }
-    const handleSubmit =  async ()=>{
+    const handleSignIn =  async ()=>{
         const {validateFields} = form; 
         let bool = true;
-        await validateFields().then((res)=>{},(reason)=>{bool=false;})
-        if(bool){
-            //登录请求
+        await validateFields();
             console.log(form.getFieldsValue());
             message.success('登录成功');
-
-        }
-
     }
     const isSend = async ()=>{
         let bool = true;
@@ -29,18 +25,6 @@ const LoginPage = (props) => {
             console.log('发请求了');
         }
         return bool;
-    }
-    const checkeName = (rule,value)=>{
-        if(!value){
-            return Promise.resolve();
-        }
-        return Promise.resolve();
-    }
-    const checkPassword = (rule,value,callback)=>{
-        if(!value){
-            return Promise.reject('err');
-        }
-        return Promise.resolve();
     }
     const findPassword = () =>{
 
@@ -57,10 +41,9 @@ const LoginPage = (props) => {
                 </div>
                 <div className={styles.form}>
                     <Form {...layout} form = {form} name='loginForm'>
-                        <Form.Item name='username' label='用户名' rules={[{required:true,message:'不能为空'},{validator:checkeName}]}>
+                        <Form.Item name='username' label='用户名' rules={[{required:true,message:'不能为空',validator:checkAccount},]}>
                             <Input/>
                         </Form.Item>
-                        {/* <Form.Item name='password' label='密码' rules={[{required:true,message:'不能为空'}]}> */}
                         <Form.Item name='password' label='密码' rules={[{validator:checkPassword}]}>
                             <Input.Password/>
                         </Form.Item>
@@ -68,13 +51,13 @@ const LoginPage = (props) => {
                         <Form.Item name='verifyCode' rules={[{required:true,message:'请输入六位数字',pattern:/^\d{6}$/}]}>
                             <div>
                                 <Input style={{width:'calc(100% - 130px)'}} maxLength={6}/>
-                                <VerifyInput  buttonWidth='130px' timeKey ={'page'} onClick={isSend} countDownTime={6}/>
+                                <VerifyInput  buttonWidth='130px' timeKey ={'page'} onClick={isSend} countDownTime={60}/>
                             </div>
                         </Form.Item>
                         </Form.Item>
                  
                         <div className={styles.confirmButton}>
-                            <Button type="primary" onClick={handleSubmit}>登录</Button>
+                            <Button type="primary" onClick={handleSignIn}>登录</Button>
                         </div>
                     </Form>
                     <div className={styles.footer}>
