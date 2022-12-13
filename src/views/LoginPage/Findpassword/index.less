@@ -1,0 +1,30 @@
+@headerHeight: 60px;
+
+.contanier {
+    .header {
+        width: 100%;
+        height: @headerHeight;
+        line-height: @headerHeight;
+        border-bottom: 1px solid rgb(161, 160, 160);
+
+        span {
+            margin-left: 60px;
+        }
+
+        span:hover {
+            cursor: pointer;
+        }
+    }
+    .content-container {
+        width: 100%;
+        height: calc( 100vh - @headerHeight);
+        .steps{
+            margin: 70px auto;
+            width: 600px;
+        }
+        .contanier {
+            width: 100%;
+        }
+    }
+
+}

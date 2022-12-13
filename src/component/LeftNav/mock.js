@@ -1,11 +1,15 @@
 export default  [
     {
         name:'首页',
-       route:'/home'
+        route:'/home'
     },
     {
-        route:'/utils',
-        name:'工具'
+        route:'/constanter',
+        name:'个人中心'
+    },
+    {
+        route:'/joinin',
+        name:'报名参赛'
     },
     {
         route:'/file',

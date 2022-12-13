@@ -4,7 +4,6 @@ import { Form, Input, Button, Popover, message} from "antd";
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import VerifyInput from '../../component/VerifyInput'
 import { checkAccount, checkPassword } from "../../utils/check";
-const FirstStpe = lazy(()=>import('./sub-route/firstStep'))
 import styles from './index.less'
 const FormItem = Form.Item;
 const RegisterPage = (props) => {

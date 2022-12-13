@@ -1,9 +1,5 @@
 export default  [
     {
-      route: '/',
-      name: '主页'
-    },
-    {
       route: '/login',
       name: '登录页',
     },
@@ -12,7 +8,15 @@ export default  [
         name:'注册页'
     },
     {
-        route:'*',
-        name:'404'
-    }
+      route:'/findpassword',
+      name:'找回密码'
+  },
+  {
+    route: '/',
+    name: '主页'
+  },
+  {
+      route:'*',
+      name:'404'
+  }
 ]

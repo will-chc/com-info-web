@@ -53,7 +53,7 @@ const LeftNav = (props) => {
 
  
     return (
-        <div styles={{width:'calc( 100vh- )'}}>
+        <div >
             <Menu
                 mode="inline"
                 selectedKeys={selectedKeys}

@@ -1,0 +1,40 @@
+@headerHeight:100px;
+
+.container{
+    display: flex;
+    width: 100%;
+    height: calc( 100vh - @headerHeight );
+    background-color: rgb(234, 234, 234);
+    .left {
+        flex: 3;
+        height: 100%;
+        padding: 20px;
+    }
+    .right {
+        flex: 2;
+        height: 100%;
+        padding: 20px;
+        .content{
+            background-image: url('../../assect/1.jpg');
+        }
+    }
+    .content {
+        margin: 0;
+        padding: 10px 10px 0px 10px ;
+        width: calc( 100% - 20px);
+        height: calc( 100% - 20px);
+        border-radius:20px ;
+        background-color: #fff;
+        .list-time {
+            float: right;
+            font-size: 12px;
+            color: gray;
+            font-style: italic;
+        }
+        .title:hover{
+            cursor: pointer;
+            font-weight: 600;
+            background-color: rgb(201, 226, 241);
+        }
+    }
+}

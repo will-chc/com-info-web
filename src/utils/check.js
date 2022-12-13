@@ -12,3 +12,5 @@ export const checkPassword = (rule, value) => {
     if(reg.test(value)) return Promise.resolve();
     return Promise.reject('请输入正确的密码格式');
 }
+
+export const nameReg = /^(?:[\u4e00-\u9fa5·]{2,16})$/;
