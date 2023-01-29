@@ -10,6 +10,7 @@ const Uploader = (props) => {
         const arr = [...imgsdata];
         arr[index] = value;
         setImgData(arr);
+        props.onChange(arr);
         console.log('imgs', imgsdata);
     }
  return (

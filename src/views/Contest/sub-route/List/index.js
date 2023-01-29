@@ -1,79 +1,38 @@
-import { Button, Modal, Pagination, Tabs } from "antd";
+import { Button, Modal, Pagination, Tabs, Form } from "antd";
 import { CoffeeOutlined } from '@ant-design/icons'
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import styles from './index.less';
 import CardTable from "../../../../component/CardTable";
-const dataSource = [
-    {
-        name: '科技与很活',
-        key: 'track1',
-        des: `这是简介可靠的解放军发电技术的开发精
-              神科大夫尖峰时刻的飞机喀什地方精神科大夫
-              角度xczcas让罚款扣分扣分罚款看是否精神科大夫尽快发顺丰`,
-        workAsk: ['号就打架大家', 'djhdjda', 'wwiiwi']
-    },
-    {
-        name: '科技与很活',
-        key: 'track2',
-        des: `这是简介可靠的解放军发电技术的开发精
-              神科大夫尖峰时刻的飞机喀什地方精神科大夫
-              角度xczcas让罚款扣分扣分罚款看是否精神科大夫尽快发顺丰`,
-        workAsk: ['号就打架大家', 'djhdjda', 'wwiiwi']
-    },
-    {
-        name: '科技与很活',
-        key: 'track3',
-        des: `这是简介可靠的解放军发电技术的开发精
-              神科大夫尖峰时刻的飞机喀什地方精神科大夫
-              角度xczcas让罚款扣分扣分罚款看是否精神科大夫尽快发顺丰`,
-        workAsk: ['号就打架大家', 'djhdjda', 'wwiiwi']
-    },
-    {
-        name: '科技与很活',
-        key: 'track4',
-        des: `这是简介可靠的解放军发电技术的开发精
-              神科大夫尖峰时刻的飞机喀什地方精神科大夫
-              角度xczcas让罚款扣分扣分罚款看是否精神科大夫尽快发顺丰`,
-        workAsk: ['号就打架大家', 'djhdjda', 'wwiiwi']
-    },
-    {
-        name: '科技与很活',
-        key: 'track5',
-        des: `这是简介可靠的解放军发电技术的开发精
-              神科大夫尖峰时刻的飞机喀什地方精神科大夫
-              角度xczcas让罚款扣分扣分罚款看是否精神科大夫尽快发顺丰`,
-        workAsk: ['号就打架大家', 'djhdjda', 'wwiiwi']
-    },
-    {
-        name: '科技与很活',
-        key: 'track6',
-        des: `这是简介可靠的解放军发电技术的开发精
-              神科大夫尖峰时刻的飞机喀什地方精神科大夫
-              角度xczcas让罚款扣分扣分罚款看是否精神科大夫尽快发顺丰`,
-        workAsk: ['号就打架大家', 'djhdjda', 'wwiiwi']
-    },
-    {
-        name: '科技与很活',
-        key: 'track7',
-        des: `这是简介可靠的解放军发电技术的开发精
-              神科大夫尖峰时刻的飞机喀什地方精神科大夫
-              角度xczcas让罚款扣分扣分罚款看是否精神科大夫尽快发顺丰`,
-        workAsk: ['号就打架大家', 'djhdjda', 'wwiiwi']
-    },
-    {
-        name: '科技与很活',
-        key: 'track8',
-        des: `这是简介可靠的解放军发电技术的开发精
-              神科大夫尖峰时刻的飞机喀什地方精神科大夫
-              角度xczcas让罚款扣分扣分罚款看是否精神科大夫尽快发顺丰`,
-        workAsk: ['号就打架大家', 'djhdjda', 'wwiiwi']
-    },
-]
+import request from "../../../../server/request";
+import FormItem from "antd/es/form/FormItem";
+const defaultLayout = {
+    labelCol: { span: 12 },
+    wrapperCol: { span: 10 },
+}
+const TYPE = {
+    0: "实物作品",
+    1: "数字作品"
+}
 const List = (props) => {
     // state 
     const [visible, setVisible] = useState(false);
     const [curModalData, setCurModalData] = useState({});
-    const [ activeKey, setActivekey ] = useState('track');
+    const [activeKey, setActivekey] = useState('track');
+    const [dataSource, setDataSource] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
+
+    useLayoutEffect(() => {
+        init();
+    }, []);
+
+    const init = async () => {
+        let total = await request('/track');
+        const { current: _page, pageSize: _limit } = pagination;
+        let res = await request('/track', { _page, _limit });
+        setTotal(total.length);
+        setDataSource(res);
+    }
     // options
     const actions = [
         {
@@ -86,10 +45,10 @@ const List = (props) => {
         },
         {
             label: '点击报名',
-            action: (item) => { 
-                console.log('props',props);
-                const {push} = props.history;
-                push('/joinin/add',item);
+            action: (item) => {
+                console.log('props', props);
+                const { push } = props.history;
+                push('/joinin/add', item);
             }
         }
     ]
@@ -104,7 +63,14 @@ const List = (props) => {
         },
     ]
     // function
-
+    const onChange = async (current, pageSize) => {
+        setPagination({
+            current,
+            pageSize
+        });
+        let res = await request('/track', { _page: current, _limit: pageSize });
+        setDataSource(res);
+    }
     const RenderList = () => {
         return (
             <div className={styles['list-container']}>
@@ -113,19 +79,47 @@ const List = (props) => {
                     actions={actions}
                     columns={columns}
                 />
-                <Pagination className={styles.pagination} simple current={1} total={10} pageSize={8} />
+                <Pagination className={styles.pagination} total={total} {...pagination} onChange={onChange} />
             </div>
         )
     };
 
-    const RenderMyJoin = () => {
+    const RenderMyJoin = (props) => {
         return (
             <div className={styles['my-container']}>
-                <div className={styles['my-content-none']}>
-                    <CoffeeOutlined />
-                    <h5 className={styles['tips']}>暂无报名信息</h5>
-                    <Button onClick={()=>{setActivekey('track')}}>点击前往报名</Button>
-                </div>
+                {props.contestInfo.account
+                    ? (
+                        <div className={styles['my-content']}>
+                            <h2>报名信息</h2>
+                            <Form className={styles.form}>
+                                <FormItem label='参赛赛道' {...defaultLayout}>
+                                    <span className={styles['track']}>{props.contestInfo.trackName}</span>
+                                </FormItem>
+                                <FormItem label='作品名称' {...defaultLayout}>
+                                    <span >{props.contestInfo.worksName}</span>
+                                </FormItem>
+                                <FormItem label='作品类型' {...defaultLayout}>
+                                    <span className={styles['track']}>{TYPE[props.contestInfo.type]}</span>
+                                </FormItem>
+                                <FormItem label='作品介绍' {...defaultLayout}>
+                                    <span >{props.contestInfo.decription}</span>
+                                </FormItem>
+                                <FormItem label='作品信息' {...defaultLayout}>
+                                    {props.contestInfo.imgs.map((img) => {
+                                        return <img className={styles.img} src={img}/>
+                                    })}
+                                </FormItem>
+                                
+                            </Form>
+                        </div>)
+                    : (
+                        <div className={styles['my-content-none']}>
+                            <CoffeeOutlined />
+                            <h5 className={styles['tips']}>暂无报名信息</h5>
+                            <Button onClick={() => { setActivekey('track') }}>点击前往报名</Button>
+                        </div>
+                    )}
+
             </div>
         )
     }
@@ -140,17 +134,17 @@ const List = (props) => {
         {
             label: '我的报名',
             key: 'my',
-            children: <RenderMyJoin/>
+            children: <RenderMyJoin contestInfo={props.contestInfo}/>
         },
     ]
 
     return (
         <div className={styles.container}>
-            <Tabs 
-            activeKey={activeKey}
-            type="card" 
-            items={items} 
-            onChange = {(key)=>{setActivekey(key)}}
+            <Tabs
+                activeKey={activeKey}
+                type="card"
+                items={items}
+                onChange={(key) => { setActivekey(key) }}
             />
             <div className={styles.pagination}>
             </div>

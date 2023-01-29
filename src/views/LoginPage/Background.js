@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 const Background = (props) => {
-    return (
+    useEffect(()=> {
+        
+    },[]) 
+       return (
         <canvas id="canvas"></canvas>
     )
 }

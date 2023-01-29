@@ -3,6 +3,7 @@ import { CloseCircleOutlined } from '@ant-design/icons';
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { nameReg } from "../../utils/check";
 import styles from './index.less';
+import request from "../../server/request";
 const FormItem = Form.Item;
 const FormItemLayout = {
     labelCol: { span: 2 },
@@ -45,15 +46,27 @@ const UserPage = (props) => {
     const [open, setOpen] = useState(false);
     const [form] = Form.useForm();
     const [members, setMembers] = useState([]);
+    const [userInfo, setUserInfo] = useState({});
+    const [account, setAccount] = useState("");
     //hook
-    useEffect(() => {
-        form.setFieldsValue(userInfo);
-        setMembers(userInfo.members);
+    useLayoutEffect(() => {
+        //获取信息
+        initData();
     }, [])
 
     // function 
     const handleEdit = () => {
         setOpen(true);
+    }
+
+    const initData = async () => {
+        const { account } = JSON.parse(localStorage.getItem('user'));
+        const res = await request('/userInfo', { account });
+        form.setFieldsValue(res[0]);
+        form.setFieldValue('account', account);
+        setAccount(account);
+        setMembers(res[0].members);
+        setUserInfo(res[0])
     }
 
     const delMember = (i) => {
@@ -71,15 +84,28 @@ const UserPage = (props) => {
         m.push(item);
         setMembers(m);
     }
-    const handleChange = (e,i) => {
-        console.log(e.target.value, i);
+    const handleChange = (e, i) => {
         const m = [...members];
         m[i] = e.target.value;
         setMembers(m);
     }
     const handleSubmit = async () => {
         await form.validateFields();
-        console.log(form.getFieldsValue());
+        const { id } = JSON.parse(localStorage.getItem('user'));
+        const status = "0";
+        //编辑
+        try {
+            const res = await request('/userInfo/' + id, { ...form.getFieldsValue(), members, status }, 'PATCH');
+            if (res.error) {
+                await  request('/userInfo', { ...form.getFieldsValue(), members, status }, 'POST');
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        setOpen(false);
+        message.success('编辑成功');
+        initData();
+
     }
     return (
         <div className={styles.container}>
@@ -87,7 +113,7 @@ const UserPage = (props) => {
             <div className={styles['content']}>
                 <Form labelAlign="left" className={styles['form']} >
                     <FormItem label='用户名' {...FormItemLayout}>
-                        <span>{userInfo.account}</span>
+                        <span>{account}</span>
                     </FormItem>
                     <FormItem label='团队名称' {...FormItemLayout}>
                         <span>{userInfo.teamName}</span>
@@ -97,7 +123,7 @@ const UserPage = (props) => {
                         <span>{userInfo.header}</span>
                     </FormItem>
                     <FormItem label='成员' {...FormItemLayout}>
-                        <span>{userInfo.members.join('，')}</span>
+                        <span>{userInfo.members?.join('，')}</span>
                     </FormItem>
                     <FormItem label='院校' {...FormItemLayout}>
                         <span>{userInfo.school}</span>
@@ -152,7 +178,7 @@ const UserPage = (props) => {
                         label='队长'
                         name='header'
                         rules={[
-                            { required: true, message: '请输入正确的中文名', pattern: nameReg  }
+                            { required: true, message: '请输入正确的中文名', pattern: nameReg }
                         ]}
                         {...editLayout}
                     >
@@ -164,14 +190,13 @@ const UserPage = (props) => {
                     >
                         <div className={styles['min-input']} >
                             {members && members.map((m, i) => {
-                                console.log(m);
                                 return (
                                     <Input
                                         key={m}
                                         className={styles['item']}
                                         addonAfter={<CloseCircleOutlined className={styles['del']} onClick={() => { delMember(i) }} />}
                                         defaultValue={m}
-                                        onBlur={(e)=> {handleChange(e,i)}}
+                                        onBlur={(e) => { handleChange(e, i) }}
                                     />
                                 )
                             })}
@@ -184,7 +209,7 @@ const UserPage = (props) => {
                         label='院校'
                         name='school'
                         rules={[
-                            { required: true, message: '请输入学校名'}
+                            { required: true, message: '请输入学校名' }
                         ]}
                         {...editLayout}
                     >
@@ -194,7 +219,7 @@ const UserPage = (props) => {
                         label='指导老师'
                         name='teacher'
                         rules={[
-                            { required: true, message: '请输入正确的姓名', pattern: nameReg}
+                            { required: true, message: '请输入正确的姓名', pattern: nameReg }
                         ]}
                         {...editLayout}
                     >
@@ -204,7 +229,7 @@ const UserPage = (props) => {
                         label='团队介绍'
                         name='des'
                         rules={[
-                            { required: true, message: '请输入20-400字的介绍', max: 400, min: 20}
+                            { required: true, message: '请输入20-400字的介绍', max: 400, min: 20 }
                         ]}
                         {...editLayout}
                     >
@@ -214,7 +239,7 @@ const UserPage = (props) => {
                         label='联系方式'
                         name='connect'
                         rules={[
-                            { required: true, message: '请输入联系方式'}
+                            { required: true, message: '请输入联系方式' }
                         ]}
                         {...editLayout}
                     >

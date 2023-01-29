@@ -5,6 +5,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons'
 import VerifyInput from '../../component/VerifyInput'
 import { checkAccount, checkPassword } from "../../utils/check";
 import styles from './index.less'
+import request from "../../server/request";
 const FormItem = Form.Item;
 const RegisterPage = (props) => {
     const [form] = Form.useForm();
@@ -21,11 +22,22 @@ const RegisterPage = (props) => {
         }
         return bool;
     }
+    const isRegister = async () => {
+       
+    }
     
     const handleRegister  = async () =>{
         await form.validateFields();
-        const params = form.getFieldValue();
-        console.log('注册参数：', params);
+        const { account, password, name } = form.getFieldsValue();
+        const flag = await request('/login', { account });
+        if(flag[0]) {
+            message.warn('账号已注册');
+            return ;
+        }
+        const params = form.getFieldsValue();
+        console.log('注册参数：', account, password);
+        console.log("@@@@@2");
+        const res = await request('/login',{account,password ,name}, "POST");
         message.success('注册成功，返回登录');
         backToLogin();        
     }
@@ -54,6 +66,13 @@ const RegisterPage = (props) => {
                         />
                     </FormItem>
                     <Popover className={styles.tips} content='密码必须包含字母和数字'><QuestionCircleOutlined /></Popover>
+                    <FormItem label='参赛名称' name='name'
+                         rules={[
+                            {required:true, message: '不能为空'}
+                        ]}
+                    >
+                        <Input/>
+                    </FormItem>
                     <Form.Item label='验证码' name='verifyCode' rules={[{required:true,message:'请输入六位数字',pattern:/^\d{6}$/}]}>
                             <div>
                                 <Input style={{width:'calc(100% - 130px)'}} maxLength={6}/>

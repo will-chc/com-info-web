@@ -1,0 +1,48 @@
+@headrHeight: 100px;
+.container {
+    width: 100%;
+    height: calc( 100vh - @headrHeight );
+    .searchbox {
+        height: 80px;
+        margin: 40px 20px;
+        padding-left: 100px;
+        padding-top: 20px;
+        box-shadow: 4px 4px 10px rgb(153, 153, 153);
+    }
+    .table {
+        // height: calc( 100% - 200px );
+        margin: 0px 20px;
+        // background-color: rgb(177, 34, 34);
+        box-shadow: 4px 4px 20px rgb(153, 153, 153);
+    }
+}
+.min-input {
+    .item {
+        margin-bottom: 10px;
+    }
+    .del {
+        cursor: pointer;
+        :hover {
+            background-color: rgb(238, 42, 42);
+            color: rgb(252, 252, 252);
+        }
+    }
+    .add {
+        width: 100%;
+        height: 32px;
+        border: 1px dashed grey;
+        text-align: center;
+        font-size: 16px;
+        line-height: 32px;
+        
+    }
+    .add:hover {
+            border: 2px dashed rgb(59, 139, 33);
+            color: rgb(52, 221, 33);
+            cursor: pointer;
+    }
+}
+.addBtn{
+    position: absolute;
+    right: 20px
+}

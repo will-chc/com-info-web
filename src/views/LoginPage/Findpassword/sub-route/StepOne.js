@@ -3,6 +3,7 @@ import React from "react";
 import styles from './index.less';
 import VerifyInput from "../../../../component/VerifyInput";
 import { checkAccount } from "../../../../utils/check";
+import request from "../../../../server/request";
 const FormItem = Form.Item;
 const Stepone = (props) => {
     const [form] = Form.useForm();
@@ -16,11 +17,18 @@ const Stepone = (props) => {
     }
     const identify = async () => {
         await form.validateFields(['account','verifyCode']);
+        const { account } = form.getFieldsValue();
+        const res = await request('/login',{account});
+        if (!res[0]) {
+            message.error('邮箱错误');
+            return ;
+        }
         // 请求
         props.history.push({
             pathname:'/findpassword/steptwo',
             state:{
-                token:'step2'
+                token:'step2',
+                account
             }
         });
         props.setCurrent(1);

@@ -4,6 +4,7 @@ import styles from './index.less'
 import VerifyInput from "../../component/VerifyInput";
 import Background from "./Background";
 import { checkAccount, checkPassword } from "../../utils/check";
+import request from "../../server/request";
 const LoginPage = (props) => {
     const [form] = Form.useForm();
     const canvasRef = useRef();
@@ -16,16 +17,23 @@ const LoginPage = (props) => {
         let bool = true;
         await validateFields();
         console.log(form.getFieldsValue());
-        const userData = {id:'001', name:'回家的诱惑'}
-        localStorage.setItem('user',JSON.stringify(userData));
+        const { username:account, password } = form.getFieldsValue();
+        const res = await request('/login',{ account, password });
+        console.log(res);
+        if(res.length <= 0){
+            message.error('账号或密码错误');
+            return ;
+        }
+        const { name, id } = res[0];
+        localStorage.setItem('user',JSON.stringify({account, name, id}));
         message.success('登录成功');
+        props.history.push('/home');
     }
     const isSend = async () => {
         let bool = true;
         const { validateFields } = form;
-        await validateFields(['username', 'password']).then((res) => { }, (reason) => { bool = false; })
+        await validateFields(['username', 'password']).then((res) => { }, (reason) => { bool = false; });
         if (bool) {
-            // 发请求
             console.log('发请求了');
         }
         return bool;
